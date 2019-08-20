@@ -8,13 +8,14 @@ import pandas as pd
 
 # Part 2
 
-mars = {}
 
 def scrape():
 
-# # NASA Mars News - BeautifulSoup
+    mars = {}
 
-# URL of page to be scraped
+    # # NASA Mars News - BeautifulSoup
+
+    # URL of page to be scraped
     url = 'https://mars.nasa.gov/news/'
 
     # Retrieve page with the requests module
@@ -54,7 +55,7 @@ def scrape():
 
     # https://splinter.readthedocs.io/en/latest/drivers/chrome.html
     # check location for my chrome driver
-    get_ipython().system('which chromedriver')
+    # get_ipython().system('which chromedriver')
 
 
     executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
@@ -94,7 +95,7 @@ def scrape():
     # adding variables to the Python dictionary
     mars['feature_image_url'] = feature_image_url
 
-   ####### # # Mars Weather - Beatiful Soup
+    ####### # # Mars Weather - Beatiful Soup
 
 
     # URL of page to be scraped
@@ -102,7 +103,7 @@ def scrape():
     # Retrieve page with the requests module
     response_tweet = requests.get(url_tweet)
     soup_tweet = bs(response_tweet.text, 'html.parser')
-    print(soup_tweet.prettify())
+    # print(soup_tweet.prettify())
 
 
     tweet = soup_tweet.find_all('p', class_="TweetTextSize TweetTextSize--normal js-tweet-text tweet-text")
@@ -163,10 +164,11 @@ def scrape():
         response_usgs_image = requests.get(image_page)
         soup_usgs_image = bs(response_usgs_image.text, 'html.parser')
 
-        hemosphere_image = soup_usgs_image.find_all('div', class_='downloads')
-        hemosphere_image = hemosphere_image[0].find_all('a')[1]['href']
+        hemosphere_image = soup_usgs_image.find_all('img', class_='wide-image')
+        hemosphere_image = hemosphere_image[0]['src']
+        hemosphere_image_complete = f'https://astrogeology.usgs.gov{hemosphere_image}'
 
-        hemisphere_image_urls_img = {'img_url': hemosphere_image}
+        hemisphere_image_urls_img = {'img_url': hemosphere_image_complete}
         hemisphere_image_urls.append(hemisphere_image_urls_img)
 
 
@@ -174,3 +176,4 @@ def scrape():
     mars['hemisphere_image_urls'] = hemisphere_image_urls
 
     ######
+    return mars
